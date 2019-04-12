@@ -1,0 +1,11 @@
+/* MBARI MMS-UV-VIS-II Spec #2 Zeiss Unit Number 031266 *******************/
+/* Polynomial Coefficients C#' f(N+1) for pixel to wavelength calculation */
+/* DO NOT MODIFY FORMAT, i.e, values MUST be preceeded by their coefficent*/
+/* designator AND comment strings must have either a "/" or "*" in them.  */
+/**************************************************************************/
+C0' +2.457748093E+02
+C1' +2.136883848E+00
+C2' +8.514133181E-05
+C3' -7.207947759E-07
+C4' +0.0
+ 
