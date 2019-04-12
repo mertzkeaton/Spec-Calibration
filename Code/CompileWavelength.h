@@ -1,5 +1,5 @@
-#ifndef MMS1Compile_H
-#define MMS1Compile_H 
+#ifndef CompileWavelength_H
+#define CompileWavelength_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 #include <stddef.h>
 #include <string.h>
 
-int wavelength();
+int wavelength(char *_path, int startingWavelength, int increment);
 
 float CRMValue[] = {240.97, 249.78, 278.15, 287.03, 333.48, 345.46, 361.27, 385.36, 416.02, 452.02, 467.78, 485.20, 536.42, 640.41}; 
 

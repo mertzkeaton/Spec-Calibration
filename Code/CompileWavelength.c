@@ -1,14 +1,20 @@
-#include "MMSCompileWavelength.h"
+#include "CompileWavelength.h"
 
 int main(void){
-	char path[] = "../MMS1";
-    wavelength(path);
+	char path[] = "../Agilent1";
+    wavelength(path, 200, 1);
+	path[10] = '2';
+	wavelength(path, 200, 1);
+	char mmsPath[] = "../MMS1";
+	wavelength(mmsPath, 400, 1);
 	path[6] = '2';
-	wavelength(path);
+	wavelength(mmsPath, 400, 1);
+	char mtPath[] = "../MT1";
+	wavelength(mtPath, 386, 0.25);
     return 0;
 }
 
-int wavelength(char *_path){
+int wavelength(char *_path, int startingWavelength, int increment){
     FILE *fp;
     DIR *dp;
 	char path[255];
@@ -21,7 +27,7 @@ int wavelength(char *_path){
 	while(dirp = readdir(dp)){
 	    puts(dirp->d_name);
 	    char filePath[255];
-		strcat(filePath, path);
+		strcpy(filePath, path);
 		strcat(filePath, "/");
 	    strcat(filePath, dirp->d_name);
 	    strcat(filePath, "/MasterSpectrumCompilation_benchtop");
@@ -33,7 +39,7 @@ int wavelength(char *_path){
 			int tokenCounter = 1;
 			int wavelengthCounter = 0;
 			float maxAbsorbance = 0;
-			int maxAbsorbanceWavelength = 0;
+			float maxAbsorbanceWavelength = 0;
 			struct Measurement measure = {0};
 			while (token != NULL && wavelengthCounter < 14){
 			    float currentAbsorbance = 0;
@@ -44,15 +50,15 @@ int wavelength(char *_path){
 			    }else if ( tokenCounter == 4 && strcmp(token, CRMName)){
 				break;
 				
-			    }else if (tokenCounter > (24 + CRM[wavelengthCounter] + 5 - 400)&&tokenCounter > 24){
+			    }else if (tokenCounter > (24 + 5 + ((CRM[wavelengthCounter] - startingWavelength) * increment))&&tokenCounter > 24){
 				measurement[measurementCount - 1].wavelength[wavelengthCounter++] = maxAbsorbanceWavelength;
 				maxAbsorbance =0;
 				maxAbsorbanceWavelength = 0;
-			    }else if (tokenCounter > (24 + CRM[wavelengthCounter] - 5 - 400) && tokenCounter >24){
+			    }else if (tokenCounter > (24 - 5 + ((CRM[wavelengthCounter] - startingWavelength) * increment)) && tokenCounter >24){
 				sscanf(token,"%f", &currentAbsorbance);
 				if (currentAbsorbance > maxAbsorbance){
 				    maxAbsorbance = currentAbsorbance;
-				    maxAbsorbanceWavelength = tokenCounter + 400 - 24;
+				    maxAbsorbanceWavelength = ((tokenCounter  - 24) / increment) + startingWavelength;
 				}
 			    }
 			    token = strtok(NULL, "\t"); 
