@@ -7,8 +7,8 @@ int main(void){
 	wavelength(path, 200, 1);
 	char mmsPath[] = "../MMS1";
 	wavelength(mmsPath, 400, 1);
-	path[6] = '2';
-	wavelength(mmsPath, 400, 1);
+	char mms2Path[] = "../MMS2";
+	wavelength(mms2Path, 400, 1);
 	char mtPath[] = "../MT1";
 	wavelength(mtPath, 386, 0.25);
     return 0;
@@ -50,15 +50,15 @@ int wavelength(char *_path, int startingWavelength, int increment){
 			    }else if ( tokenCounter == 4 && strcmp(token, CRMName)){
 				break;
 				
-			    }else if (tokenCounter > (24 + 5 + ((CRM[wavelengthCounter] - startingWavelength) * increment))&&tokenCounter > 24){
+			    }else if (tokenCounter > (24 + 5 + ((CRM[wavelengthCounter] - startingWavelength) / increment))&&tokenCounter > 24){
 				measurement[measurementCount - 1].wavelength[wavelengthCounter++] = maxAbsorbanceWavelength;
 				maxAbsorbance =0;
 				maxAbsorbanceWavelength = 0;
-			    }else if (tokenCounter > (24 - 5 + ((CRM[wavelengthCounter] - startingWavelength) * increment)) && tokenCounter >24){
+			    }else if (tokenCounter > (24 - 5 + ((CRM[wavelengthCounter] - startingWavelength) / increment)) && tokenCounter >24){
 				sscanf(token,"%f", &currentAbsorbance);
 				if (currentAbsorbance > maxAbsorbance){
 				    maxAbsorbance = currentAbsorbance;
-				    maxAbsorbanceWavelength = ((tokenCounter  - 24) / increment) + startingWavelength;
+				    maxAbsorbanceWavelength = ((tokenCounter  - 24) * increment) + startingWavelength;
 				}
 			    }
 			    token = strtok(NULL, "\t"); 

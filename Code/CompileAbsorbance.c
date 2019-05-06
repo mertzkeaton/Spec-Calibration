@@ -7,10 +7,10 @@ int main(void){
 	absorbance(path, 200, 1);
 	char mmsPath[] = "../MMS1";
 	absorbance(mmsPath, 400, 1);
-	path[6] = '2';
-	absorbance(mmsPath, 400, 1);
+	char mms2Path[] = "../MMS2";
+	absorbance(mms2Path, 400, 1);
 	char mtPath[] = "../MT1";
-	absorbance(mtPath, 386, 0.25);
+	absorbance(mtPath, 386, 4);
     return 0;
 }
 
@@ -33,7 +33,7 @@ int absorbance(char *_path, int startingWavelength, int increment){
 	    strcat(filePath, "/MasterSpectrumCompilation_benchtop");
 	    fp = fopen(filePath,"r");
 	    if(fp){
-			char line[7500];
+			char line[50000];
 			while(fgets(line, sizeof(line), fp) != NULL){
 				char *token = strtok(line, "\t");
 				int tokenCounter = 1;
@@ -49,14 +49,14 @@ int absorbance(char *_path, int startingWavelength, int increment){
 							if (!strcmp(token, crm[i].name)){
 								strcpy(measure.name, token);
 								currentCRM = i;
-								tokenValue = (CrmWavelength[wavelengthCounter++] - startingWavelength) * increment + 24;
+								tokenValue = (int)((CrmWavelength[wavelengthCounter++] - startingWavelength) * increment) + 24;
 								measurement[measureCounter++] = measure;
 							}
 						}
 					}else if (tokenCounter == tokenValue){
 						sscanf(token, "%f", &measurement[measureCounter-1].actual[wavelengthCounter-1]);
 						measurement[measureCounter-1].expected[wavelengthCounter-1] = crm[currentCRM].absorbance[wavelengthCounter-1];
-						tokenValue = (CrmWavelength[wavelengthCounter] - startingWavelength) * increment + 24;
+						tokenValue = (int)((CrmWavelength[wavelengthCounter] - startingWavelength) * increment) + 24;
 						++wavelengthCounter;
 					}
 					token = strtok(NULL, "\t"); 
